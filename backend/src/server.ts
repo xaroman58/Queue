@@ -2,7 +2,8 @@ import http from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import { URL } from 'url';
 
-const PORT = process.env.PORT || 3000;
+
+const PORT = Number(process.env.PORT) || 3000;
 const TIME_FOR_LEADER = 20;
 
 const server = http.createServer((req, res) => {

@@ -362,21 +362,21 @@
 
         centerBtn.onclick = () => { cameraLockedOnPlayer = true; };
 
-        // Dynamicznie obliczana platforma (Nigdy się nie skończy!)
+        
         function drawFlatFloor(floorY) {
             ctx.save();
             
-            // Obliczamy współrzędną X ostatniego gracza z zapasem bezpieczeństwa 1000px w lewo
+           
             const minX = WALL_X - (totalInQueue * PLAYER_SPACING) - 1000;
-            // Dodajemy też zapas w prawo (za terminalem)
+        
             const maxX = WALL_X + 500;
             const floorWidth = maxX - minX;
 
-            // Ciemny pas podłoża
+     
             ctx.fillStyle = '#0a0a10';
             ctx.fillRect(minX, floorY, floorWidth, canvas.height);
 
-            // Główna neonowa linia drogi
+         
             ctx.shadowBlur = 8;
             ctx.shadowColor = '#ff9800';
             ctx.strokeStyle = 'rgba(255, 152, 0, 0.6)';
@@ -386,7 +386,7 @@
             ctx.lineTo(maxX, floorY);
             ctx.stroke();
 
-            // Druga, pomocnicza linia technologiczna poniżej
+       
             ctx.shadowBlur = 0;
             ctx.strokeStyle = 'rgba(255, 152, 0, 0.15)';
             ctx.lineWidth = 1;
@@ -609,13 +609,12 @@
 
             const floorY = canvas.height / 2 + 100;
 
-            // 2. Płaska neonowa platforma (DYNAMICZNA)
+
             drawFlatFloor(floorY);
 
-            // 3. Futurystyczny Terminal Monolit 2D
             drawTerminal(floorY);
             
-            // 4. Rysowanie stickmanów
+
             for (let i = 1; i <= totalInQueue; i++) {
                 const playerX = WALL_X - (i * PLAYER_SPACING);
                 const screenX = playerX + cameraX;

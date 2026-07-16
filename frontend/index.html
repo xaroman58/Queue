@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Queue MVP - Neon Side-Scroller</title>
+    <!-- Google Identity Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: #08080c; color: #f0f0f5; 
+            font-family: 'Rajdhani', sans-serif; overflow: hidden; touch-action: none; 
+        }
+
+        /* STYLIZACJA SCROLLBARÓW */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 10, 16, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 152, 0, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 152, 0, 0.6);
+        }
+        
+        /* --- LANDING PAGE (Cyber Theme) --- */
+        #landing-page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #151525 0%, #050508 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        h1 { 
+            font-family: 'Orbitron', sans-serif; font-size: 4rem; font-weight: 900; color: #ff9800; 
+            margin-bottom: 15px; text-transform: uppercase; letter-spacing: 6px; 
+            text-shadow: 0 0 10px rgba(255, 152, 0, 0.5), 0 0 30px rgba(255, 152, 0, 0.2); 
+        }
+        .description { 
+            max-width: 600px; font-size: 1.3rem; color: #8f90a6; margin-bottom: 40px; 
+            line-height: 1.6; font-weight: 500; 
+        }
+        
+        #google-login-wrapper { 
+            background: rgba(10, 10, 16, 0.6); padding: 15px; border-radius: 8px; 
+            border: 1px solid rgba(255, 152, 0, 0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- GAME CONTAINER --- */
+        #game-container { display: none; width: 100%; height: 100%; position: relative; }
+
+        #gameCanvas { position: absolute; top: 0; left: 0; z-index: 1; cursor: grab; }
+        #gameCanvas:active { cursor: grabbing; }
+        #hud { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; display: flex; flex-direction: column; }
+        
+        #ui-panel { 
+            background: rgba(10, 10, 16, 0.85); 
+            padding: 20px; text-align: center; 
+            border-bottom: 1px solid rgba(255, 152, 0, 0.25); 
+            pointer-events: auto;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #status { 
+            font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700; 
+            color: #ff9800; margin-bottom: 5px; letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
+        }
+        #timer-box { 
+            font-family: 'Orbitron', sans-serif; font-size: 15px; 
+            color: #ff5252; font-weight: 700; margin-bottom: 15px; min-height: 20px; 
+            text-shadow: 0 0 8px rgba(255, 82, 82, 0.4);
+        }
+        
+        #input-area { display: flex; gap: 12px; justify-content: center; max-width: 650px; margin: 0 auto; }
+        
+        input { 
+            flex: 1; padding: 14px; background: rgba(20, 20, 30, 0.8); 
+            border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; border-radius: 8px; 
+            pointer-events: auto; font-size: 16px; font-family: 'Rajdhani', sans-serif; font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+        input:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.2), inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        button { 
+            padding: 14px 28px; background: #ff9800; border: none; color: #08080c; 
+            font-family: 'Orbitron', sans-serif; font-weight: 900; border-radius: 8px; 
+            cursor: pointer; pointer-events: auto; transition: all 0.2s; font-size: 13px; 
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+        }
+        button:hover { 
+            background: #ffb74d; 
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.5);
+        }
+        button:active { transform: translateY(1px); }
+        
+        .btn-sec { 
+            background: transparent; color: #4caf50; 
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            box-shadow: none;
+        }
+        .btn-sec:hover {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4caf50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.2);
+        }
+
+        #leader-banner { 
+            margin-top: 25px; align-self: center; 
+            background: rgba(255, 152, 0, 0.05); 
+            border: 1px solid rgba(255, 152, 0, 0.4); 
+            padding: 16px 40px; border-radius: 12px; text-align: center; 
+            opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            pointer-events: auto; backdrop-filter: blur(8px); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 152, 0, 0.1); 
+            max-width: 85%;
+            transform: translateY(-10px);
+        }
+        #leader-banner.active { opacity: 1; transform: translateY(0); }
+        .banner-title { 
+            display: block; font-size: 11px; color: #ff9800; margin-bottom: 5px; 
+            text-transform: uppercase; letter-spacing: 2px; font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+        #leader-text { 
+            font-size: 24px; font-weight: 700; color: #fff; word-wrap: break-word; 
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        #system-logs { 
+            position: absolute; bottom: 20px; left: 15px; width: 280px; max-height: 160px; 
+            overflow-y: auto; font-size: 13px; color: #8a8a9d; pointer-events: auto; 
+            display: flex; flex-direction: column; gap: 6px; 
+            background: rgba(10, 10, 16, 0.85); padding: 12px; border-radius: 8px; 
+            border: 1px solid rgba(255, 152, 0, 0.15);
+            backdrop-filter: blur(8px);
+            font-family: 'Rajdhani', sans-serif; font-weight: 600;
+        }
+        .log-sys { color: #5c5c70; font-style: italic; }
+        .log-msg { color: #e0e0e5; }
+        .log-blur { color: #444453; filter: blur(2px); }
+
+        @media (max-width: 600px) {
+            #input-area { flex-wrap: wrap; gap: 8px; }
+            input { min-width: 100%; margin-bottom: 2px; }
+            button { flex: 1; padding: 12px 20px; }
+            #leader-text { font-size: 18px; }
+            #system-logs { display: none; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STARTING PAGE -->
+<div id="landing-page">
+    <h1>Queue</h1>
+    <div class="description">
+        Thousands of players. One terminal. You have only 20 seconds to scream your message to the entire internet before the crowd brutally pushes you to the very back.<br><br>
+        Whisper to those next to you. Make alliances. Wait for your turn.
+    </div>
+    
+    <div id="google-login-wrapper">
+        <div id="g_id_onload"
+             data-client_id="183677470650-jbppkcnbnfs9fj8kmi2jjgo917l97s2k.apps.googleusercontent.com"
+             data-callback="handleGoogleLogin"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="filled_black"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
+    </div>
+</div>
+
+<!-- GAME CONTAINER -->
+<div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <div id="hud">
+        <div id="ui-panel">
+            <div id="status">Connecting...</div>
+            <div id="timer-box"></div>
+            <div id="input-area">
+                <input type="text" id="msg-input" placeholder="Type a message..." />
+                <button id="send-btn">Send</button>
+                <button id="center-btn" class="btn-sec">Center Camera</button>
+            </div>
+        </div>
+        <div id="leader-banner">
+            <span class="banner-title">The Leader shouts to the crowd:</span>
+            <div id="leader-text">...</div>
+        </div>
+        <div id="system-logs"></div>
+    </div>
+</div>
+
+<script>
+    // --- GOOGLE OAUTH & JWT DECODING ---
+    function decodeJwtResponse(token) {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    }
+
+    function handleGoogleLogin(response) {
+        const responsePayload = decodeJwtResponse(response.credential);
+        const playerFirstName = responsePayload.given_name || responsePayload.name;
+
+        document.getElementById('landing-page').style.display = 'none';
+        document.getElementById('game-container').style.display = 'block';
+
+        initGameEngine(playerFirstName);
+    }
+
+    // HUD Elements
+    const statusDiv = document.getElementById('status');
+    const timerBox = document.getElementById('timer-box');
+    const msgInput = document.getElementById('msg-input');
+    const sendBtn = document.getElementById('send-btn');
+    const centerBtn = document.getElementById('center-btn');
+    const leaderBanner = document.getElementById('leader-banner');
+    const leaderText = document.getElementById('leader-text');
+    const systemLogs = document.getElementById('system-logs');
+
+    // --- GAME ENGINE ---
+    function initGameEngine(playerName) {
+        let myPosition = 0;
+        let totalInQueue = 0;
+        let activeBubbles = {};
+        
+        // --- ADRES SERWERA BACKENDOWEGO ---
+        // Zmień ten adres, gdy wrzucisz backend na np. Render.com (pamiętaj o wss:// zamiast ws://)
+        const wsUrl = `ws://localhost:3000/?name=${encodeURIComponent(playerName)}`;
+        const ws = new WebSocket(wsUrl); 
+        
+        ws.onopen = () => { statusDiv.innerText = 'Connected to server!'; };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'WELCOME') { logSystem(`Logged in as ${data.username}`, 'sys'); }
+            
+            if (data.type === 'QUEUE_UPDATE') {
+                myPosition = data.position;
+                totalInQueue = data.total;
+                statusDiv.innerText = `Position: ${myPosition} / ${totalInQueue}`;
+                timerBox.innerText = data.timeLeft !== undefined && totalInQueue > 0 ? `Leader's Time: ${data.timeLeft}s` : '';
+                
+                if (myPosition === 1) {
+                    msgInput.placeholder = "Scream to everyone! (Max 60 chars)";
+                    msgInput.maxLength = 60;
+                } else {
+                    msgInput.placeholder = "Whisper to neighbors... (Max 120 chars)";
+                    msgInput.maxLength = 120;
+                }
+            }
+            
+            if (data.type === 'CHAT_MSG') {
+                if (data.system) {
+                    logSystem(data.text, 'sys');
+                } else {
+                    if (data.isGlobal) {
+                        leaderText.innerText = data.text;
+                        leaderBanner.classList.add('active');
+                        logSystem(`${data.sender}: ${data.text}`, 'msg');
+                    } else if (data.position) {
+                        const isReadable = Math.abs(myPosition - data.position) <= 1;
+                        activeBubbles[data.position] = { text: data.text, isReadable: isReadable, expires: Date.now() + 4000 };
+                        
+                        if (isReadable) logSystem(`${data.sender}: ${data.text}`, 'msg');
+                        else logSystem(`${data.sender} whispers something...`, 'blur');
+                    }
+                }
+            }
+
+            if (data.type === 'CLEAR_BANNER') { leaderBanner.classList.remove('active'); }
+            if (data.type === 'KICKED') { logSystem(`[KICK] ${data.reason}`, 'sys'); }
+        };
+
+        const send = () => {
+            const text = msgInput.value.trim();
+            if (!text) return;
+            ws.send(JSON.stringify({ type: 'CHAT_MSG', text }));
+            msgInput.value = '';
+        };
+
+        sendBtn.onclick = send;
+        msgInput.onkeypress = (e) => { if (e.key === 'Enter') send(); };
+
+        function logSystem(text, type) {
+            if (!systemLogs) return;
+            const p = document.createElement('div');
+            if (type === 'sys') p.className = 'log-sys';
+            else if (type === 'blur') p.className = 'log-blur';
+            else p.className = 'log-msg';
+            p.innerText = text;
+            systemLogs.appendChild(p);
+            systemLogs.scrollTop = systemLogs.scrollHeight;
+        }
+
+        // --- CANVAS RENDERING ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const PLAYER_SPACING = 60; 
+        const WALL_X = window.innerWidth > 600 ? 260 : 140;
+        
+        let cameraX = 0; 
+        let isDragging = false;
+        let lastMouseX = 0;
+        let cameraLockedOnPlayer = true;
+
+        // Cząsteczki w tle
+        const particles = [];
+        for (let i = 0; i < 40; i++) {
+            particles.push({
+                x: Math.random() * window.innerWidth * 2 - window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 2 + 0.5,
+                speedY: -Math.random() * 0.4 - 0.1,
+                alpha: Math.random() * 0.5 + 0.2
+            });
+        }
+
+        const startDrag = (clientX) => { isDragging = true; lastMouseX = clientX; cameraLockedOnPlayer = false; };
+        const doDrag = (clientX) => { if (isDragging) { cameraX += (clientX - lastMouseX); lastMouseX = clientX; } };
+        const stopDrag = () => { isDragging = false; };
+
+        canvas.addEventListener('mousedown', (e) => startDrag(e.clientX));
+        window.addEventListener('mousemove', (e) => doDrag(e.clientX));
+        window.addEventListener('mouseup', stopDrag);
+
+        canvas.addEventListener('touchstart', (e) => startDrag(e.touches[0].clientX), { passive: false });
+        window.addEventListener('touchmove', (e) => doDrag(e.touches[0].clientX), { passive: false });
+        window.addEventListener('touchend', stopDrag);
+
+        centerBtn.onclick = () => { cameraLockedOnPlayer = true; };
+
+        // Dynamicznie obliczana platforma (Nigdy się nie skończy!)
+        function drawFlatFloor(floorY) {
+            ctx.save();
+            
+            // Obliczamy współrzędną X ostatniego gracza z zapasem bezpieczeństwa 1000px w lewo
+            const minX = WALL_X - (totalInQueue * PLAYER_SPACING) - 1000;
+            // Dodajemy też zapas w prawo (za terminalem)
+            const maxX = WALL_X + 500;
+            const floorWidth = maxX - minX;
+
+            // Ciemny pas podłoża
+            ctx.fillStyle = '#0a0a10';
+            ctx.fillRect(minX, floorY, floorWidth, canvas.height);
+
+            // Główna neonowa linia drogi
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#ff9800';
+            ctx.strokeStyle = 'rgba(255, 152, 0, 0.6)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(minX, floorY);
+            ctx.lineTo(maxX, floorY);
+            ctx.stroke();
+
+            // Druga, pomocnicza linia technologiczna poniżej
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(255, 152, 0, 0.15)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(minX, floorY + 12);
+            ctx.lineTo(maxX, floorY + 12);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // Terminal
+        function drawTerminal(floorY) {
+            ctx.save();
+            const pulse = Math.sin(Date.now() / 150) * 0.15 + 0.85;
+
+            ctx.fillStyle = '#10101a';
+            ctx.strokeStyle = 'rgba(255, 152, 0, 0.3)';
+            ctx.lineWidth = 2;
+            
+            const tWidth = 60;
+            const tHeight = 280;
+            const tX = WALL_X;
+            const tY = floorY - tHeight;
+            
+            ctx.fillRect(tX, tY, tWidth, tHeight);
+            ctx.strokeRect(tX, tY, tWidth, tHeight);
+
+            const scrX = tX + 8;
+            const scrY = tY + 20;
+            const scrW = tWidth - 16;
+            const scrH = 80;
+
+            ctx.fillStyle = '#050508';
+            ctx.strokeStyle = 'rgba(76, 175, 80, 0.4)';
+            ctx.strokeRect(scrX, scrY, scrW, scrH);
+            ctx.fillRect(scrX, scrY, scrW, scrH);
+
+            ctx.shadowBlur = 10 * pulse;
+            ctx.shadowColor = '#4caf50';
+            ctx.fillStyle = 'rgba(76, 175, 80, 0.85)';
+            
+            const waveY = scrY + 40 + Math.sin(Date.now() / 200) * 25;
+            ctx.beginPath();
+            ctx.moveTo(scrX + 3, waveY);
+            ctx.lineTo(scrX + scrW - 3, waveY);
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = 'rgba(76, 175, 80, 0.7)';
+            ctx.stroke();
+
+            for(let i = 0; i < 4; i++) {
+                const barH = 10 + Math.sin(Date.now() / 100 + i) * 15;
+                ctx.fillRect(scrX + 6 + (i * 9), scrY + scrH - barH - 5, 5, barH);
+            }
+
+            ctx.shadowBlur = 15 * pulse;
+            ctx.shadowColor = '#ff9800';
+            ctx.strokeStyle = 'rgba(255, 152, 0, 0.9)';
+            ctx.lineWidth = 4 * pulse;
+            
+            ctx.beginPath();
+            ctx.moveTo(tX + tWidth / 2, tY + tHeight - 5);
+            ctx.lineTo(tX + tWidth / 2, tY + scrH + 30);
+            ctx.stroke();
+
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#ff5252';
+            ctx.beginPath();
+            ctx.arc(tX + 15, tY + tHeight - 30, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#4caf50';
+            ctx.beginPath();
+            ctx.arc(tX + tWidth - 15, tY + tHeight - 30, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawStickman(x, y, isMe, isLeader, index) {
+            ctx.save();
+            let color = isLeader ? '#ff9800' : (isMe ? '#4caf50' : '#4d4d66');
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = isMe ? 3.5 : 2;
+            ctx.lineCap = 'round';
+
+            if (isMe || isLeader) {
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = color;
+            }
+
+            const bouncePhase = Date.now() / 250 + index;
+            const bodyOffset = Math.sin(bouncePhase) * 2; 
+            const kneeOffset = Math.sin(bouncePhase) * 1;
+
+            const footLeftX = x - 8;
+            const footRightX = x + 4; 
+            const footY = y;
+
+            const pelvisX = x - 2; 
+            const pelvisY = y - 12 + kneeOffset;
+
+            const neckX = x;
+            const neckY = y - 32 + bodyOffset;
+
+            const headX = x + 3; 
+            const headY = y - 44 + bodyOffset;
+
+            // 1. Nogi
+            ctx.beginPath();
+            ctx.moveTo(pelvisX, pelvisY);
+            ctx.lineTo(x - 6, pelvisY + (footY - pelvisY)/2);
+            ctx.lineTo(footLeftX, footY);
+            ctx.moveTo(pelvisX, pelvisY);
+            ctx.lineTo(x + 2, pelvisY + (footY - pelvisY)/2);
+            ctx.lineTo(footRightX, footY);
+            ctx.stroke();
+
+            // 2. Tułów
+            ctx.beginPath();
+            ctx.moveTo(pelvisX, pelvisY);
+            ctx.lineTo(neckX, neckY);
+            ctx.stroke();
+
+            // 3. Ręce
+            ctx.beginPath();
+            ctx.moveTo(neckX, neckY + 3);
+            ctx.lineTo(x - 4, neckY + 16);
+            ctx.moveTo(neckX, neckY + 3);
+            ctx.lineTo(x + 6, neckY + 16);
+            ctx.stroke();
+
+            // 4. Głowa
+            ctx.beginPath();
+            ctx.arc(headX, headY, 8, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            ctx.shadowBlur = 0;
+
+            // Podpis pod nogami
+            ctx.fillStyle = isMe ? '#4caf50' : (isLeader ? '#ff9800' : '#5c5c70'); 
+            ctx.font = 'bold 11px Orbitron, sans-serif'; 
+            ctx.textAlign = 'center';
+            ctx.fillText(isMe ? 'YOU' : `#${index}`, x, y + 22);
+
+            // --- DYMKI CZATU ---
+            const bubble = activeBubbles[index];
+            if (bubble && bubble.expires > Date.now()) {
+                ctx.font = '700 13px Rajdhani, sans-serif';
+                const textWidth = ctx.measureText(bubble.text).width;
+                const pad = 10;
+                const bubbleWidth = Math.max(textWidth + pad * 2, 40);
+                const bubbleHeight = 28;
+                const bX = x - bubbleWidth / 2;
+                
+                const altitudeStep = 34; 
+                const altitudeMultiplier = index % 3; 
+                const bY = headY - 40 - (altitudeMultiplier * altitudeStep);
+
+                ctx.fillStyle = 'rgba(10, 10, 16, 0.95)';
+                ctx.strokeStyle = isMe ? '#4caf50' : '#4d4d66';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                if (ctx.roundRect) ctx.roundRect(bX, bY, bubbleWidth, bubbleHeight, 8);
+                else ctx.rect(bX, bY, bubbleWidth, bubbleHeight);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.beginPath(); 
+                ctx.moveTo(x, headY - 12); 
+                ctx.lineTo(x, bY + bubbleHeight);
+                ctx.strokeStyle = isMe ? 'rgba(76, 175, 80, 0.4)' : 'rgba(255, 255, 255, 0.15)'; 
+                ctx.lineWidth = 1; 
+                ctx.stroke();
+
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                if (!bubble.isReadable) { ctx.filter = 'blur(4px)'; ctx.globalAlpha = 0.4; }
+                ctx.fillText(bubble.text, x, bY + 18);
+                
+                ctx.filter = 'none'; ctx.globalAlpha = 1.0;
+            }
+
+            ctx.restore();
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Cząsteczki w tle
+            ctx.save();
+            ctx.fillStyle = '#ff9800';
+            particles.forEach(p => {
+                p.y += p.speedY;
+                const particleX = p.x + (cameraX * 0.15); 
+                
+                if (p.y < 0) {
+                    p.y = canvas.height;
+                    p.x = Math.random() * canvas.width * 2 - cameraX * 0.15;
+                }
+
+                ctx.globalAlpha = p.alpha;
+                ctx.beginPath();
+                ctx.arc(particleX, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+
+            // Płynne centrowanie kamery
+            if (cameraLockedOnPlayer) {
+                const myWorldX = WALL_X - (myPosition * PLAYER_SPACING);
+                const targetCameraX = (canvas.width / 2) - myWorldX;
+                cameraX += (targetCameraX - cameraX) * 0.08;
+            }
+
+            ctx.save();
+            ctx.translate(cameraX, 0);
+
+            const floorY = canvas.height / 2 + 100;
+
+            // 2. Płaska neonowa platforma (DYNAMICZNA)
+            drawFlatFloor(floorY);
+
+            // 3. Futurystyczny Terminal Monolit 2D
+            drawTerminal(floorY);
+            
+            // 4. Rysowanie stickmanów
+            for (let i = 1; i <= totalInQueue; i++) {
+                const playerX = WALL_X - (i * PLAYER_SPACING);
+                const screenX = playerX + cameraX;
+                
+                if (screenX > -100 && screenX < canvas.width + 100) {
+                    drawStickman(playerX, floorY, i === myPosition, i === 1, i);
+                }
+            }
+
+            ctx.restore();
+            requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

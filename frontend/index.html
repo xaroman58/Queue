@@ -252,7 +252,7 @@
         
         // --- ADRES SERWERA BACKENDOWEGO ---
         // Zmień ten adres, gdy wrzucisz backend na np. Render.com (pamiętaj o wss:// zamiast ws://)
-        const wsUrl = `ws://localhost:3000/?name=${encodeURIComponent(playerName)}`;
+        const wsUrl = `wss://queue-warp.onrender.com/?name=${encodeURIComponent(playerName)}`;
         const ws = new WebSocket(wsUrl); 
         
         ws.onopen = () => { statusDiv.innerText = 'Connected to server!'; };

@@ -33,17 +33,14 @@
         #gameCanvas { position: absolute; top: 0; left: 0; z-index: 1; cursor: grab; }
         #gameCanvas:active { cursor: grabbing; }
         
-        /* HUD Layout Redesign (Mobile Friendly) */
         #hud { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; }
         
-        /* Top Section: Banner */
         #top-hud { width: 100%; display: flex; justify-content: center; padding-top: 15px; }
         #leader-banner { background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.5); padding: 12px 30px; border-radius: 12px; text-align: center; opacity: 0; transition: all 0.4s; pointer-events: auto; backdrop-filter: blur(8px); max-width: 85%; transform: translateY(-20px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         #leader-banner.active { opacity: 1; transform: translateY(0); }
         .banner-title { display: block; font-size: 11px; color: #ff9800; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; font-family: 'Orbitron', sans-serif; font-weight: 700; }
         #leader-text { font-size: 22px; font-weight: 700; color: #fff; word-wrap: break-word; }
 
-        /* Bottom Section: Chat & Input */
         #bottom-hud { width: 100%; pointer-events: auto; background: rgba(10, 10, 16, 0.9); border-top: 1px solid rgba(255, 152, 0, 0.3); backdrop-filter: blur(12px); box-shadow: 0 -10px 30px rgba(0,0,0,0.5); padding: 15px; box-sizing: border-box; }
         
         #hud-info { display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto 10px auto; }
@@ -60,32 +57,35 @@
         button:disabled { background: #444; color: #222; cursor: not-allowed; }
         .btn-sec { background: transparent; color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.5); }
         .btn-sec:hover { background: rgba(76, 175, 80, 0.1); }
+        /* Nowy przycisk Mainframe/End */
+        .btn-mainframe { background: transparent; color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.5); }
+        .btn-mainframe:hover { background: rgba(255, 82, 82, 0.1); border-color: #ff5252; }
 
-        #system-logs { position: absolute; bottom: 100px; left: 15px; width: 280px; max-height: 140px; overflow-y: auto; font-size: 13px; pointer-events: auto; display: flex; flex-direction: column; gap: 4px; background: rgba(10, 10, 16, 0.7); padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 152, 0, 0.1); backdrop-filter: blur(4px); }
+        #system-logs { position: absolute; bottom: 120px; left: 15px; width: 280px; max-height: 120px; overflow-y: auto; font-size: 13px; pointer-events: auto; display: flex; flex-direction: column; gap: 4px; background: rgba(10, 10, 16, 0.7); padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 152, 0, 0.1); backdrop-filter: blur(4px); }
         .log-sys { color: #8a8a9d; font-style: italic; }
         .log-msg { color: #e0e0e5; }
         .log-blur { color: #444453; filter: blur(2px); }
 
-        /* --- PLAYER ACTION MENU --- */
         #player-menu { display: none; position: absolute; background: rgba(15, 15, 25, 0.95); border: 1px solid #ff9800; border-radius: 8px; padding: 10px; box-shadow: 0 0 20px rgba(255, 152, 0, 0.3); z-index: 50; flex-direction: column; gap: 8px; pointer-events: auto; min-width: 150px; }
         .menu-title { font-family: 'Orbitron', sans-serif; font-size: 11px; color: #aaa; text-align: center; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 2px; }
         .action-btn { background: #1a1a2a; border: 1px solid #333; color: #fff; padding: 8px; text-align: center; font-size: 12px; cursor: pointer; border-radius: 4px; font-family: 'Orbitron', sans-serif; transition: 0.2s; }
         .action-btn:hover { background: #2a2a3a; border-color: #ff9800; color: #ff9800; }
         .btn-danger:hover { border-color: #ff5252; color: #ff5252; }
 
-        /* --- DUEL UI --- */
-        #duel-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(10px); pointer-events: auto; }
-        #duel-title { font-family: 'Orbitron', sans-serif; color: #ff5252; font-size: 2rem; margin-bottom: 10px; text-shadow: 0 0 15px rgba(255,82,82,0.6); }
-        #duel-word { font-family: 'Rajdhani', sans-serif; font-size: 4rem; font-weight: 900; color: #fff; letter-spacing: 5px; margin-bottom: 30px; user-select: none; }
-        #duel-input { font-size: 24px; padding: 15px; text-align: center; max-width: 400px; background: rgba(255, 255, 255, 0.1); border: 2px solid #ff9800; }
+        #duel-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 200; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(15px); pointer-events: auto; }
+        #duel-title { font-family: 'Orbitron', sans-serif; color: #ff5252; font-size: 2.5rem; margin-bottom: 15px; text-shadow: 0 0 20px rgba(255,82,82,0.7); text-transform: uppercase; letter-spacing: 3px; }
+        #duel-word { font-family: 'Rajdhani', sans-serif; font-size: 5rem; font-weight: 900; color: #fff; letter-spacing: 8px; margin-bottom: 35px; user-select: none; text-shadow: 0 0 10px rgba(255,255,255,0.4); }
+        #duel-input { font-size: 28px; padding: 18px; text-align: center; max-width: 500px; background: rgba(255, 255, 255, 0.1); border: 2px solid #ff9800; text-transform: uppercase; }
 
         @media (max-width: 600px) {
             #input-area { flex-wrap: wrap; }
             input { min-width: 100%; margin-bottom: 5px; }
-            button { flex: 1; }
+            button { flex: 1; font-size: 11px; }
+            #hud-info { font-size: 13px; }
             #leader-text { font-size: 16px; }
-            #system-logs { width: 160px; max-height: 80px; font-size: 10px; bottom: 120px; left: 5px; padding: 5px; }
-            #duel-word { font-size: 2.5rem; }
+            #system-logs { width: 160px; max-height: 80px; font-size: 10px; bottom: 135px; left: 5px; padding: 5px; }
+            #duel-word { font-size: 2.5rem; letter-spacing: 4px; }
+            #duel-title { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -94,7 +94,7 @@
 <div id="landing-page">
     <h1>Queue</h1>
     <div class="description">
-        Tysiące graczy. Zabezpiecz pozycję. Wyzywaj innych na pojedynki (1v1) o wyższe miejsce. Lider ma tylko jeden strzał, żeby przemówić do tłumu.
+        Thousands of players. One Terminal. You have 20 seconds to speak. Whisper alliances. Wait for your turn.<br><br>⚔️ **Challenge others** to rapid typing duels (1v1) for a better place in the queue!
     </div>
     <div id="google-login-wrapper">
         <div id="g_id_onload" data-client_id="183677470650-jbppkcnbnfs9fj8kmi2jjgo917l97s2k.apps.googleusercontent.com" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
@@ -102,27 +102,25 @@
     </div>
 </div>
 
-<!-- DUEL OVERLAY -->
 <div id="duel-overlay">
-    <div id="duel-title">SZYBKIE PISANIE 1v1!</div>
+    <div id="duel-title">1v1 TYPING DUEL!</div>
     <div style="color:#aaa; font-size:1.2rem; margin-bottom: 5px;">Przepisz to słowo najszybciej jak potrafisz:</div>
     <div id="duel-word">ŁADOWANIE...</div>
-    <input type="text" id="duel-input" placeholder="Wpisz tu..." autocomplete="off" />
+    <input type="text" id="duel-input" placeholder="Type here..." autocomplete="off" />
 </div>
 
-<!-- GAME CONTAINER -->
 <div id="game-container">
     <canvas id="gameCanvas"></canvas>
     
     <div id="player-menu">
-        <div class="menu-title" id="pm-name">Gracz</div>
+        <div class="menu-title" id="pm-name">Player</div>
         <div id="pm-actions"></div>
     </div>
 
     <div id="hud">
         <div id="top-hud">
             <div id="leader-banner">
-                <span class="banner-title">Lider krzyczy do tłumu:</span>
+                <span class="banner-title">The Leader shouts to the crowd:</span>
                 <div id="leader-text">...</div>
             </div>
         </div>
@@ -136,8 +134,9 @@
             </div>
             <div id="input-area">
                 <input type="text" id="msg-input" placeholder="Type a message..." />
-                <button id="send-btn">Wyślij</button>
-                <button id="center-btn" class="btn-sec">Centruj</button>
+                <button id="send-btn">Send</button>
+                <button id="center-btn" class="btn-sec">Center Me</button>
+                <button id="end-btn" class="btn-mainframe">Mainframe</button>
             </div>
         </div>
     </div>
@@ -167,6 +166,7 @@
     const msgInput = document.getElementById('msg-input');
     const sendBtn = document.getElementById('send-btn');
     const centerBtn = document.getElementById('center-btn');
+    const endBtn = document.getElementById('end-btn'); // Nowy przycisk
     const leaderBanner = document.getElementById('leader-banner');
     const leaderText = document.getElementById('leader-text');
     const systemLogs = document.getElementById('system-logs');
@@ -185,36 +185,36 @@
         let activeBubbles = {};
         let ws;
         
-        // const wsUrl = `wss://twoj-backend.onrender.com/?name=${encodeURIComponent(playerName)}`;
-        const wsUrl = `ws://localhost:3000/?name=${encodeURIComponent(playerName)}`;
+        const wsUrl = `wss://queue-warp.onrender.com/?name=${encodeURIComponent(playerName)}`;
+        // const wsUrl = `ws://localhost:3000/?name=${encodeURIComponent(playerName)}`;
         ws = new WebSocket(wsUrl); 
         
-        ws.onopen = () => { statusDiv.innerText = 'Połączono!'; };
+        ws.onopen = () => { statusDiv.innerText = 'Connected!'; };
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             
-            if (data.type === 'WELCOME') { logSystem(`Zalogowano: ${data.username}`, 'sys'); }
+            if (data.type === 'WELCOME') { logSystem(`Logged as: ${data.username}`, 'sys'); }
             
             if (data.type === 'QUEUE_UPDATE') {
                 myPosition = data.position;
                 totalInQueue = data.total;
-                statusDiv.innerText = `Pozycja: ${myPosition} / ${totalInQueue}`;
-                timerBox.innerText = data.timeLeft !== undefined && totalInQueue > 0 ? `Czas lidera: ${data.timeLeft}s` : '';
+                statusDiv.innerText = `Position: ${myPosition} / ${totalInQueue}`;
+                timerBox.innerText = data.timeLeft !== undefined && totalInQueue > 0 ? `Leader: ${data.timeLeft}s` : '';
                 
                 if (myPosition === 1) {
                     if (data.isLeaderMuted) {
-                        msgInput.placeholder = "Wykorzystałeś swoją 1 wiadomość!";
+                        msgInput.placeholder = "Used your 1 message!";
                         msgInput.disabled = true;
                         sendBtn.disabled = true;
                     } else {
-                        msgInput.placeholder = "Krzycz do tłumu! (TYLKO 1 WIADOMOŚĆ)";
+                        msgInput.placeholder = "Scream! (ONLY 1 MESSAGE)";
                         msgInput.maxLength = 60;
                         msgInput.disabled = false;
                         sendBtn.disabled = false;
                     }
                 } else {
-                    msgInput.placeholder = "Szeptaj do sąsiadów...";
+                    msgInput.placeholder = "Whisper...";
                     msgInput.maxLength = 120;
                     msgInput.disabled = false;
                     sendBtn.disabled = false;
@@ -233,7 +233,7 @@
                         const isReadable = Math.abs(myPosition - data.position) <= 1;
                         activeBubbles[data.position] = { text: data.text, isReadable: isReadable, expires: Date.now() + 4000 };
                         if (isReadable) logSystem(`${data.sender}: ${data.text}`, 'msg');
-                        else logSystem(`${data.sender} szepcze...`, 'blur');
+                        else logSystem(`${data.sender} whispers...`, 'blur');
                     }
                 }
             }
@@ -241,14 +241,13 @@
             if (data.type === 'CLEAR_BANNER') { leaderBanner.classList.remove('active'); }
             if (data.type === 'KICKED') { logSystem(`[KICK] ${data.reason}`, 'sys'); }
 
-            // --- MINIGRA EVENTS ---
             if (data.type === 'DUEL_START') {
                 playerMenu.style.display = 'none';
                 duelOverlay.style.display = 'flex';
                 duelWord.innerText = data.word;
                 duelInput.value = '';
                 duelInput.focus();
-                logSystem(`Rozpoczęto pojedynek 1v1 z ${data.opponent}!`, 'sys');
+                logSystem(`1v1 Duel started with ${data.opponent}!`, 'sys');
             }
 
             if (data.type === 'DUEL_END') {
@@ -280,7 +279,6 @@
             systemLogs.scrollTop = systemLogs.scrollHeight;
         }
 
-        // --- CANVAS RENDERING & INTERAKCJE ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         
@@ -311,7 +309,6 @@
         const doDrag = (clientX) => { if (isDragging) { cameraX += (clientX - lastMouseX); lastMouseX = clientX; } };
         const stopDrag = () => { isDragging = false; };
 
-        // Mechanika klikania w graczy
         canvas.addEventListener('mousedown', (e) => startDrag(e.clientX));
         window.addEventListener('mousemove', (e) => doDrag(e.clientX));
         window.addEventListener('mouseup', (e) => {
@@ -322,10 +319,8 @@
             const clickWorldX = e.clientX - cameraX;
             const clickY = e.clientY;
 
-            // Szukamy klikniętego gracza
             for (let i = 1; i <= totalInQueue; i++) {
                 const pX = WALL_X - (i * PLAYER_SPACING);
-                // Hitbox: X +/- 20px, Y od głowy do stóp (floorY - 60 do floorY)
                 if (Math.abs(clickWorldX - pX) < 25 && clickY > floorY - 70 && clickY < floorY + 10) {
                     showPlayerMenu(i, e.clientX, e.clientY);
                     return;
@@ -339,39 +334,44 @@
         window.addEventListener('touchend', stopDrag);
 
         centerBtn.onclick = () => { cameraLockedOnPlayer = true; playerMenu.style.display = 'none'; };
+        
+        // NOWA MECHANIKA: Kamera na Mainframe
+        endBtn.onclick = () => {
+            cameraLockedOnPlayer = false; // Musimy odblokować kamerę
+            // Chcemy, żeby WALL_X był w centralnym punkcie X ekranu
+            cameraX = (canvas.width / 2) - WALL_X; 
+            playerMenu.style.display = 'none';
+            logSystem("Moving camera to Mainframe (Queue Head).", "sys");
+        };
 
         function showPlayerMenu(targetIndex, screenX, screenY) {
             pmActions.innerHTML = '';
             
             if (targetIndex === myPosition) {
-                pmName.innerText = "To Ty";
+                pmName.innerText = "YOU";
             } else {
-                pmName.innerText = `Gracz #${targetIndex}`;
+                pmName.innerText = `Player #${targetIndex}`;
                 
-                // Opcja 1: Oddaj miejsce (tylko osobie +1)
                 if (targetIndex === myPosition + 1) {
                     const btnGive = document.createElement('div');
                     btnGive.className = 'action-btn';
-                    btnGive.innerText = "Oddaj miejsce (Swap)";
+                    btnGive.innerText = "Swap places (Give place)";
                     btnGive.onclick = () => { ws.send(JSON.stringify({ type: 'GIVE_PLACE' })); playerMenu.style.display = 'none'; };
                     pmActions.appendChild(btnGive);
                 }
                 
-                // Opcja 2: Wyzwij na pojedynek (tylko osoba -1, z wykluczeniem lidera)
                 if (targetIndex === myPosition - 1 && targetIndex > 1) {
                     const btnDuel = document.createElement('div');
                     btnDuel.className = 'action-btn btn-danger';
-                    btnDuel.innerText = "⚔️ Wyzwij o pozycję (10s CD)";
+                    btnDuel.innerText = "⚔️ Challenge 1v1 (10s CD)";
                     btnDuel.onclick = () => { ws.send(JSON.stringify({ type: 'DUEL_CHALLENGE' })); playerMenu.style.display = 'none'; };
                     pmActions.appendChild(btnDuel);
                 }
 
                 if (pmActions.children.length === 0) {
                     const msg = document.createElement('div');
-                    msg.style.fontSize = '10px';
-                    msg.style.color = '#555';
-                    msg.style.textAlign = 'center';
-                    msg.innerText = "Brak dostępnych akcji";
+                    msg.style.fontSize = '10px'; msg.style.color = '#555'; msg.style.textAlign = 'center';
+                    msg.innerText = "No actions available";
                     pmActions.appendChild(msg);
                 }
             }
@@ -381,7 +381,6 @@
             playerMenu.style.display = 'flex';
         }
 
-        // --- ELEMENTY TŁA (Terminal i Banery AdSense) ---
         function drawFlatFloor(floorY) {
             ctx.save();
             const minX = WALL_X - (totalInQueue * PLAYER_SPACING) - 1000;
@@ -391,50 +390,37 @@
             ctx.fillStyle = '#0a0a10';
             ctx.fillRect(minX, floorY, floorWidth, canvas.height);
 
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = '#ff9800';
-            ctx.strokeStyle = 'rgba(255, 152, 0, 0.6)';
-            ctx.lineWidth = 3;
+            ctx.shadowBlur = 8; ctx.shadowColor = '#ff9800';
+            ctx.strokeStyle = 'rgba(255, 152, 0, 0.6)'; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(minX, floorY); ctx.lineTo(maxX, floorY); ctx.stroke();
 
-            ctx.shadowBlur = 0;
-            ctx.strokeStyle = 'rgba(255, 152, 0, 0.15)';
-            ctx.lineWidth = 1;
+            ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(255, 152, 0, 0.15)'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(minX, floorY + 12); ctx.lineTo(maxX, floorY + 12); ctx.stroke();
-
             ctx.restore();
         }
 
         function drawAdsAndTerminal(floorY) {
             ctx.save();
             
-            // BANERY ADSENSE (Miejsca na ścianie)
+            // --- POPRAWKA BANERÓW PO LEWEJ ---
             const adWidth = 150;
             const adHeight = 200;
             const adY = floorY - adHeight - 20;
-
+            
+            // Używamy ujemnego mnożnika, żeby rzutować na LEWO od WALL_X
             for(let k = 1; k <= 3; k++) {
-                const adX = WALL_X + 100 + (k * 180);
+                const adX = WALL_X - 100 - (k * 180);
                 
-                // Szkielet Banera
-                ctx.fillStyle = 'rgba(10, 10, 15, 0.5)';
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-                ctx.lineWidth = 2;
-                ctx.fillRect(adX, adY, adWidth, adHeight);
-                ctx.strokeRect(adX, adY, adWidth, adHeight);
+                ctx.fillStyle = 'rgba(10, 10, 15, 0.5)'; ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 2;
+                ctx.fillRect(adX, adY, adWidth, adHeight); ctx.strokeRect(adX, adY, adWidth, adHeight);
 
-                // Tekst Placeholder
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-                ctx.font = 'bold 16px Orbitron';
-                ctx.textAlign = 'center';
-                ctx.fillText('AD SPACE', adX + adWidth/2, adY + adHeight/2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'; ctx.font = 'bold 16px Orbitron'; ctx.textAlign = 'center';
+                ctx.fillText('CURSED ARCADE', adX + adWidth/2, adY + adHeight/2);
             }
+            // ------------------------------------
 
-            // TERMINAL GŁÓWNY
             const pulse = Math.sin(Date.now() / 150) * 0.15 + 0.85;
-            ctx.fillStyle = '#10101a';
-            ctx.strokeStyle = 'rgba(255, 152, 0, 0.3)';
-            ctx.lineWidth = 2;
+            ctx.fillStyle = '#10101a'; ctx.strokeStyle = 'rgba(255, 152, 0, 0.3)'; ctx.lineWidth = 2;
             
             const tWidth = 60; const tHeight = 280;
             const tX = WALL_X; const tY = floorY - tHeight;
@@ -448,28 +434,22 @@
             ctx.strokeRect(scrX, scrY, scrW, scrH); ctx.fillRect(scrX, scrY, scrW, scrH);
 
             ctx.shadowBlur = 10 * pulse; ctx.shadowColor = '#4caf50'; ctx.fillStyle = 'rgba(76, 175, 80, 0.85)';
-            
             const waveY = scrY + 40 + Math.sin(Date.now() / 200) * 25;
-            ctx.beginPath(); ctx.moveTo(scrX + 3, waveY); ctx.lineTo(scrX + scrW - 3, waveY);
-            ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(76, 175, 80, 0.7)'; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(scrX + 3, waveY); ctx.lineTo(scrX + scrW - 3, waveY); ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(76, 175, 80, 0.7)'; ctx.stroke();
 
             ctx.shadowBlur = 15 * pulse; ctx.shadowColor = '#ff9800'; ctx.strokeStyle = 'rgba(255, 152, 0, 0.9)'; ctx.lineWidth = 4 * pulse;
             ctx.beginPath(); ctx.moveTo(tX + tWidth / 2, tY + tHeight - 5); ctx.lineTo(tX + tWidth / 2, tY + scrH + 30); ctx.stroke();
-
             ctx.restore();
         }
 
         function drawStickman(x, y, isMe, isLeader, index) {
             ctx.save();
             let color = isLeader ? '#ff9800' : (isMe ? '#4caf50' : '#4d4d66');
-            
             ctx.strokeStyle = color; ctx.lineWidth = isMe ? 3.5 : 2; ctx.lineCap = 'round';
-
             if (isMe || isLeader) { ctx.shadowBlur = 10; ctx.shadowColor = color; }
 
             const bouncePhase = Date.now() / 250 + index;
             const bodyOffset = Math.sin(bouncePhase) * 2; const kneeOffset = Math.sin(bouncePhase) * 1;
-
             const footLeftX = x - 8; const footRightX = x + 4; const footY = y;
             const pelvisX = x - 2; const pelvisY = y - 12 + kneeOffset;
             const neckX = x; const neckY = y - 32 + bodyOffset;
@@ -494,14 +474,10 @@
                 const bubbleHeight = 28;
                 const bX = x - bubbleWidth / 2;
                 const bY = headY - 40 - ((index % 3) * 34);
-
                 ctx.fillStyle = 'rgba(10, 10, 16, 0.95)'; ctx.strokeStyle = isMe ? '#4caf50' : '#4d4d66'; ctx.lineWidth = 1.5;
                 ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(bX, bY, bubbleWidth, bubbleHeight, 8); else ctx.rect(bX, bY, bubbleWidth, bubbleHeight);
                 ctx.fill(); ctx.stroke();
-
-                ctx.beginPath(); ctx.moveTo(x, headY - 12); ctx.lineTo(x, bY + bubbleHeight);
-                ctx.strokeStyle = isMe ? 'rgba(76, 175, 80, 0.4)' : 'rgba(255, 255, 255, 0.15)'; ctx.lineWidth = 1; ctx.stroke();
-
+                ctx.beginPath(); ctx.moveTo(x, headY - 12); ctx.lineTo(x, bY + bubbleHeight); ctx.strokeStyle = isMe ? 'rgba(76, 175, 80, 0.4)' : 'rgba(255, 255, 255, 0.15)'; ctx.lineWidth = 1; ctx.stroke();
                 ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
                 if (!bubble.isReadable) { ctx.filter = 'blur(4px)'; ctx.globalAlpha = 0.4; }
                 ctx.fillText(bubble.text, x, bY + 18);
@@ -512,7 +488,6 @@
 
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             ctx.save(); ctx.fillStyle = '#ff9800';
             particles.forEach(p => {
                 p.y += p.speedY; const particleX = p.x + (cameraX * 0.15); 
@@ -529,10 +504,7 @@
 
             ctx.save(); ctx.translate(cameraX, 0);
             const floorY = canvas.height / 2 + 100;
-
-            drawFlatFloor(floorY);
-            drawAdsAndTerminal(floorY);
-            
+            drawFlatFloor(floorY); drawAdsAndTerminal(floorY);
             for (let i = 1; i <= totalInQueue; i++) {
                 const playerX = WALL_X - (i * PLAYER_SPACING);
                 const screenX = playerX + cameraX;
@@ -540,7 +512,6 @@
                     drawStickman(playerX, floorY, i === myPosition, i === 1, i);
                 }
             }
-
             ctx.restore();
             requestAnimationFrame(render);
         }
